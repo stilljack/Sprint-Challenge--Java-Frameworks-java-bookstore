@@ -1,5 +1,4 @@
 package com.lambdaschool.usermodel.services;
-
 import com.lambdaschool.usermodel.exceptions.ResourceFoundException;
 import com.lambdaschool.usermodel.exceptions.ResourceNotFoundException;
 import com.lambdaschool.usermodel.logging.Loggable;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService
     public User findUserById(long id) throws ResourceNotFoundException
     {
         return userrepos.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
     }
 
     @Override
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService
                                            Pageable pageable)
     {
         return userrepos.findByUsernameContainingIgnoreCase(username.toLowerCase(),
-                                                            pageable);
+                pageable);
     }
 
     @Override
@@ -51,8 +50,8 @@ public class UserServiceImpl implements UserService
     {
         List<User> list = new ArrayList<>();
         userrepos.findAll(pageable)
-                 .iterator()
-                 .forEachRemaining(list::add);
+                .iterator()
+                .forEachRemaining(list::add);
         return list;
     }
 
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService
     public void delete(long id)
     {
         userrepos.findById(id)
-                 .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("User id " + id + " not found!"));
         userrepos.deleteById(id);
     }
 
@@ -81,35 +80,35 @@ public class UserServiceImpl implements UserService
     public User save(User user)
     {
         if (userrepos.findByUsername(user.getUsername()
-                                         .toLowerCase()) != null)
+                .toLowerCase()) != null)
         {
             throw new ResourceFoundException(user.getUsername() + " is already taken!");
         }
 
         User newUser = new User();
         newUser.setUsername(user.getUsername()
-                                .toLowerCase());
+                .toLowerCase());
         newUser.setPasswordNotEncrypt(user.getPassword());
         newUser.setPrimaryemail(user.getPrimaryemail()
-                                    .toLowerCase());
+                .toLowerCase());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
         for (UserRoles ur : user.getUserroles())
         {
             long id = ur.getRole()
-                        .getRoleid();
+                    .getRoleid();
             Role role = rolerepos.findById(id)
-                                 .orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
             newRoles.add(new UserRoles(newUser,
-                                       role));
+                    role));
         }
         newUser.setUserroles(newRoles);
 
         for (Useremail ue : user.getUseremails())
         {
             newUser.getUseremails()
-                   .add(new Useremail(newUser,
-                                      ue.getUseremail()));
+                    .add(new Useremail(newUser,
+                            ue.getUseremail()));
         }
 
         return userrepos.save(newUser);
@@ -122,7 +121,7 @@ public class UserServiceImpl implements UserService
                        boolean isAdmin)
     {
         Authentication authentication = SecurityContextHolder.getContext()
-                                                             .getAuthentication();
+                .getAuthentication();
 
         User authenticatedUser = userrepos.findByUsername(authentication.getName());
 
@@ -133,7 +132,7 @@ public class UserServiceImpl implements UserService
             if (user.getUsername() != null)
             {
                 currentUser.setUsername(user.getUsername()
-                                            .toLowerCase());
+                        .toLowerCase());
             }
 
             if (user.getPassword() != null)
@@ -144,7 +143,7 @@ public class UserServiceImpl implements UserService
             if (user.getPrimaryemail() != null)
             {
                 currentUser.setPrimaryemail(user.getPrimaryemail()
-                                                .toLowerCase());
+                        .toLowerCase());
             }
 
             if (user.getUserroles()
@@ -159,8 +158,8 @@ public class UserServiceImpl implements UserService
                 for (Useremail ue : user.getUseremails())
                 {
                     currentUser.getUseremails()
-                               .add(new Useremail(currentUser,
-                                                  ue.getUseremail()));
+                            .add(new Useremail(currentUser,
+                                    ue.getUseremail()));
                 }
             }
 
@@ -177,16 +176,16 @@ public class UserServiceImpl implements UserService
                                long roleid)
     {
         userrepos.findById(userid)
-                 .orElseThrow(() -> new ResourceNotFoundException("User id " + userid + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("User id " + userid + " not found!"));
         rolerepos.findById(roleid)
-                 .orElseThrow(() -> new ResourceNotFoundException("Role id " + roleid + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role id " + roleid + " not found!"));
 
         if (rolerepos.checkUserRolesCombo(userid,
-                                          roleid)
-                     .getCount() > 0)
+                roleid)
+                .getCount() > 0)
         {
             rolerepos.deleteUserRoles(userid,
-                                      roleid);
+                    roleid);
         } else
         {
             throw new ResourceNotFoundException("Role and User Combination Does Not Exists");
@@ -199,18 +198,18 @@ public class UserServiceImpl implements UserService
                             long roleid)
     {
         userrepos.findById(userid)
-                 .orElseThrow(() -> new ResourceNotFoundException("User id " + userid + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("User id " + userid + " not found!"));
         rolerepos.findById(roleid)
-                 .orElseThrow(() -> new ResourceNotFoundException("Role id " + roleid + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role id " + roleid + " not found!"));
 
         if (rolerepos.checkUserRolesCombo(userid,
-                                          roleid)
-                     .getCount() <= 0)
+                roleid)
+                .getCount() <= 0)
         {
             rolerepos.insertUserRoles(userAuditing.getCurrentAuditor()
-                                                  .get(),
-                                      userid,
-                                      roleid);
+                            .get(),
+                    userid,
+                    roleid);
         } else
         {
             throw new ResourceFoundException("Role and User Combination Already Exists");
