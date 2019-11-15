@@ -12,5 +12,6 @@ public interface BooksService {
     Books update(Books restaurant, long id);
     void delete(long id);
     Authors save(long bookid, long authorid);
+    Books findBookById(long bookid);
     // Book update(Long id, String bookTitle, String copyright, String ISBN);
 }

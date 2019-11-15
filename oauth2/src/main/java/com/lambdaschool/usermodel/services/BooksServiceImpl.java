@@ -29,6 +29,11 @@ public class BooksServiceImpl implements BooksService {
 
     @Autowired
     AuthorsService authorService;
+    @Override
+    public Books findBookById(long bookid) {
+        return bookRepository.findById(bookid).orElseThrow(() ->
+                new ResourceNotFoundException("Book id " + bookid + " not found!"));
+    }
 
     @Override
     public List<Books> findAll() {

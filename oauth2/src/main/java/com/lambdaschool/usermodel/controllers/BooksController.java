@@ -5,6 +5,8 @@ import com.lambdaschool.usermodel.logging.Loggable;
 import com.lambdaschool.usermodel.models.Authors;
 import com.lambdaschool.usermodel.models.Books;
 import com.lambdaschool.usermodel.models.Wrote;
+import com.lambdaschool.usermodel.repository.AuthorsRepo;
+import com.lambdaschool.usermodel.services.AuthorsService;
 import com.lambdaschool.usermodel.services.BooksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +29,8 @@ public class BooksController {
     private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
     @Autowired
     private BooksService booksService;
+    @Autowired
+    private AuthorsService authorService;
     //GET /books/books - returns a JSON object list of all the books, thier sections, and their authors.
     // http://localhost:2019/books/books
 
@@ -49,26 +53,32 @@ public class BooksController {
                                              @PathVariable
                                                      long bookid)
         {
+
             booksService.update(updatedBook, bookid);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    @PostMapping(value = "/books/{bookid}/authors/{authorid}",
+               produces = {"application/json"})
+    public ResponseEntity<?> bookToAuthor(@PathVariable long bookid,
+                                                @PathVariable long authorid) {
 
-        @PostMapping(value = "books/{bookid}/authors/{authorid}", consumes = {"application/json"})
+        authorService.createAuthorBooks(bookid, authorid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+      /*  @PostMapping(value = "books/{bookid}/authors/{authorid}", consumes = {"application/json"})
         public ResponseEntity<?> addNewBookWrote(@PathVariable long bookid, @PathVariable long authorid)
         {
+            logger.trace("book id:"+ bookid+ "authorid" + authorid + " accessed");
             Authors newAuthors = booksService.save(bookid, authorid);
 
 
-           HttpHeaders responseHeaders = new HttpHeaders();
-            URI newRestaurantURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{bookid}").buildAndExpand(newAuthors.getAuthorid()).toUri();
-            responseHeaders.setLocation(newRestaurantURI);
-
             return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
         }
-
-        @DeleteMapping(value = "/books/{bookid}", consumes = {"application/json"})
+*/
+        @DeleteMapping(value = "/books/{bookid}")
         public ResponseEntity<?> deleteBook(@PathVariable long bookid){
             booksService.delete(bookid);
+            logger.trace("book delete"+ bookid);
             return new ResponseEntity<>(HttpStatus.OK);
         }
 

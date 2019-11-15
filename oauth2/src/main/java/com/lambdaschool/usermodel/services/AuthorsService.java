@@ -6,8 +6,10 @@ import java.util.List;
 
 
 public interface AuthorsService {
+    Authors findAuthorById(long authorid);
 
-        List<Authors> findAll();
+    List<Authors> findAll();
 
-    }
+    void createAuthorBooks(long bookid, long authorid);
+}
 
