@@ -1,6 +1,8 @@
 package com.lambdaschool.usermodel.services;
 
 import com.lambdaschool.usermodel.logging.Loggable;
+import com.lambdaschool.usermodel.models.Books;
+import com.lambdaschool.usermodel.repository.BooksRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +12,14 @@ import java.util.List;
 
 @Loggable
     @Service(value = "bookService")
-    public class BooksServiceImpl implements BookService {
+    public class BooksServiceImpl implements BooksService {
 
         @Autowired
-        BookRepository bookRepository;
+        BooksRespository bookRepository;
 
         @Override
-        public List<Book> findAll() {
-            List<Book> list = new ArrayList<>();
+        public List<Books> findAll() {
+            List<Books> list = new ArrayList<>();
             bookRepository.findAll()
                     .iterator().forEachRemaining(list::add);
             return list;
@@ -28,4 +30,4 @@ import java.util.List;
         return null;
     }*/
     }
-}
+
