@@ -11,7 +11,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "wrote")
 public class Wrote extends Auditable implements Serializable{
-
     @Id
     @ManyToOne
     @JoinColumn(name = "authorid")

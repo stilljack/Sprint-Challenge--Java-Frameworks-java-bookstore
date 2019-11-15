@@ -4,20 +4,17 @@ import com.lambdaschool.usermodel.exceptions.ResourceNotFoundException;
 import com.lambdaschool.usermodel.logging.Loggable;
 import com.lambdaschool.usermodel.models.Authors;
 import com.lambdaschool.usermodel.models.Books;
-import com.lambdaschool.usermodel.models.Wrote;
 import com.lambdaschool.usermodel.repository.AuthorsRepo;
 import com.lambdaschool.usermodel.repository.BooksRespository;
-import com.lambdaschool.usermodel.repository.WroteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
-@Transactional
+
 @Loggable
 @Service(value = "booksService")
 public class BooksServiceImpl implements BooksService {
@@ -27,8 +24,8 @@ public class BooksServiceImpl implements BooksService {
     @Autowired
     AuthorsRepo authorsRepo;
 
-    @Autowired
-    WroteRepo wroteRepo;
+    /*@Autowired
+    WroteRepo wroteRepo;*/
 
     @Autowired
     AuthorsService authorService;
@@ -66,7 +63,7 @@ public class BooksServiceImpl implements BooksService {
     }
     @Transactional
     @Override
-    public Wrote save(long bookid, long authorid) {
+    public Authors save(long bookid, long authorid) {
 
         if(bookRepository.findById(bookid).isEmpty()){
             throw new ResourceNotFoundException("not found/Book ID:" + bookid);
@@ -78,11 +75,11 @@ public class BooksServiceImpl implements BooksService {
         Authors author = authorsRepo.findById(authorid).get();
         Books book = bookRepository.findById(bookid).get();
 
+        author.addAuthorBooks(book);
 
+       // Wrote newBookAuthor = new Wrote(author,book);
 
-        Wrote newBookAuthor = new Wrote(author,book);
-
-        return wroteRepo.save(newBookAuthor);
+        return authorsRepo.save(author);
     }
     @Override
     public void delete(long id) {

@@ -2,6 +2,7 @@ package com.lambdaschool.usermodel.controllers;
 
 import com.lambdaschool.usermodel.handlers.RestExceptionHandler;
 import com.lambdaschool.usermodel.logging.Loggable;
+import com.lambdaschool.usermodel.models.Authors;
 import com.lambdaschool.usermodel.models.Books;
 import com.lambdaschool.usermodel.models.Wrote;
 import com.lambdaschool.usermodel.services.BooksService;
@@ -55,11 +56,11 @@ public class BooksController {
         @PostMapping(value = "books/{bookid}/authors/{authorid}", consumes = {"application/json"})
         public ResponseEntity<?> addNewBookWrote(@PathVariable long bookid, @PathVariable long authorid)
         {
-            Wrote newBookAuthor = booksService.save(bookid, authorid);
+            Authors newAuthors = booksService.save(bookid, authorid);
 
 
-            HttpHeaders responseHeaders = new HttpHeaders();
-            URI newRestaurantURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{bookid}").buildAndExpand(newBookAuthor.getBook().getBookid()).toUri();
+           HttpHeaders responseHeaders = new HttpHeaders();
+            URI newRestaurantURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{bookid}").buildAndExpand(newAuthors.getAuthorid()).toUri();
             responseHeaders.setLocation(newRestaurantURI);
 
             return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);

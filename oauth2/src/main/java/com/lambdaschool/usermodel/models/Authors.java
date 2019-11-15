@@ -53,7 +53,9 @@ public class Authors extends Auditable{
     public void setAuthorBooks(List<Books> authorBooks) {
         this.authorBooks = authorBooks;
     }
-
+    public void addAuthorBooks(Books book) {
+        this.authorBooks.add(book);
+    }
 /*authors
 
     authorid - long primary key
