@@ -2,7 +2,6 @@ package com.lambdaschool.usermodel.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lambdaschool.usermodel.logging.Loggable;
-import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,11 +16,11 @@ public class Books  extends Auditable {
     private long bookid;
 
     @Column(nullable = false)
-    private String booktitle;
+    private String title;
 
     @Column(nullable = false,
             unique = true)
-    private String isbn;
+    private String ISBN;
 
     private int copy;
 
@@ -51,20 +50,20 @@ public class Books  extends Auditable {
         this.bookid = bookid;
     }
 
-    public String getBooktitle() {
-        return booktitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBooktitle(String booktitle) {
-        this.booktitle = booktitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getISBN() {
+        return ISBN;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 
     public int getCopy() {
@@ -82,4 +81,8 @@ public class Books  extends Auditable {
     public void setAuthors(List<Authors> authors) {
         this.authors = authors;
     }
+
+    public Books() {
+    }
+
 }

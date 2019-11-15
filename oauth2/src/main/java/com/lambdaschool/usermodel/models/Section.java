@@ -18,7 +18,7 @@ public class Section extends Auditable {
 
     @Column(nullable = false,
             unique = true)
-    private String sectionname;
+    private String name;
     @OneToMany(mappedBy = "section",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -38,11 +38,15 @@ public class Section extends Auditable {
     }
 
     public String getSectionname() {
-        return sectionname;
+        return name;
+    }
+
+    public Section() {
     }
 
     public void setSectionname(String sectionname) {
-        this.sectionname = sectionname;
+        this.name = sectionname;
     }
+
 }
 
