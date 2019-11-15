@@ -9,7 +9,7 @@ import java.util.List;
 
 @Loggable
 @Entity
-@Table(name = "books")
+@Table(name = "book")
 public class Books  extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,15 +27,15 @@ public class Books  extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sectionid",
             nullable = false)
-    @JsonIgnoreProperties({"books", "hibernateLazyInitializer"})
+    @JsonIgnoreProperties("books")
     private Section section;
 
     @ManyToMany
-    @JoinTable(name = "bookauthor",
+    @JoinTable(name = "wrote",
             joinColumns = @JoinColumn(name = "bookid"),
             inverseJoinColumns = @JoinColumn(name = "authorid"))
-    @JsonIgnoreProperties("books")
-    List<Authors> authors = new ArrayList<>();
+    @JsonIgnoreProperties("authorBooks")
+    private List<Authors> authors = new ArrayList<>();
    /* bookid - long primary key
     booktitle - String the title of the book. Cannot be null.
     ISBN - String the ISBN number of the book. Cannot be null. Must be unique
