@@ -1,8 +1,11 @@
 package com.lambdaschool.usermodel.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lambdaschool.usermodel.logging.Loggable;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Loggable
 @Entity
@@ -16,6 +19,11 @@ public class Section extends Auditable {
     @Column(nullable = false,
             unique = true)
     private String sectionname;
+    @OneToMany(mappedBy = "section",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonIgnoreProperties("section")
+    private List<Books> books = new ArrayList<>();
  /*   section
 
     sectionid - long primary key

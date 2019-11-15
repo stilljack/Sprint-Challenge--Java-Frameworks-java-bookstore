@@ -25,6 +25,12 @@ public class Books  extends Auditable {
 
     private int copy;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sectionid",
+            nullable = false)
+    @JsonIgnoreProperties({"books", "hibernateLazyInitializer"})
+    private Section section;
+
     @ManyToMany
     @JoinTable(name = "bookauthor",
             joinColumns = @JoinColumn(name = "bookid"),
